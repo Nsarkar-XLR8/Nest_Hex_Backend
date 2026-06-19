@@ -10,6 +10,44 @@ Enterprise-grade NestJS boilerplate built for DDD and Hexagonal Architecture wit
 - **Idempotency First**: Safe writes under retries and network flakiness.
 - **RFC-7807 Errors**: Standardized Problem Details.
 
+## Architecture Diagram
+
+```
++-----------------------------------------------------------------------------------+
+|                                 Inbound Adapters                                  |
+|                         (HTTP Controllers, DTOs, Guards)                          |
++------------------------------+---------------------+------------------------------+
+                               |                     |
+                               v                     v
++-----------------------------------------------------------------------------------+
+|                               Application Services                                |
+|                    (Use Cases, Orchestration, UoW)                                |
++-----------------------------------------------------------------------------------+
+                               |                     |
+                               v                     v
++-----------------------------------------------------------------------------------+
+|                                   Domain Layer                                    |
+|                        (Entities, Value Objects, Exceptions)                      |
++-----------------------------------------------------------------------------------+
+                               |                     |
+                               v                     v
++-----------------------------------------------------------------------------------+
+|                                 Outbound Ports                                    |
+|                     (Repositories, Queue, Storage, Auth)                          |
++------------------------------+---------------------+------------------------------+
+                               |                     |
+                               v                     v
++-----------------------------------------------------------------------------------+
+|                                 Outbound Adapters                                 |
+|              (Mongo/Mongoose, Redis, BullMQ, S3, SMTP, JWT)                       |
++-----------------------------------------------------------------------------------+
+
++---------------------------+         +--------------------------+
+|     Transactional UoW     |         |     Outbox Dispatcher     |
+| (MongoDB Session/Txn)     |         | (Async side-effects)      |
++---------------------------+         +--------------------------+
+```
+
 ## API Versioning
 
 All routes are prefixed with `/api/v1`. Update `API_REFERENCE_PATH` and `OPENAPI_JSON_PATH` if you change the prefix.

@@ -1,0 +1,41 @@
+import { z } from 'zod';
+
+export const envSchema = z.object({
+  NODE_ENV: z.enum(['development', 'test', 'production']).default('development'),
+  PORT: z.coerce.number().int().positive().default(3000),
+  MONGODB_URI: z.string().min(1),
+  REDIS_HOST: z.string().min(1),
+  REDIS_PORT: z.coerce.number().int().positive(),
+  REDIS_PASSWORD: z.string().optional(),
+  REDIS_DB: z.coerce.number().int().nonnegative().default(0),
+  S3_REGION: z.string().min(1),
+  S3_ENDPOINT: z.string().optional(),
+  S3_ACCESS_KEY_ID: z.string().min(1),
+  S3_SECRET_ACCESS_KEY: z.string().min(1),
+  S3_BUCKET: z.string().min(1),
+  S3_FORCE_PATH_STYLE: z.coerce.boolean().optional().default(false),
+  IDEMPOTENCY_TTL_SECONDS: z.coerce.number().int().positive().default(3600),
+  JWT_SECRET: z.string().min(32),
+  JWT_EXPIRES_IN: z.string().default('15m'),
+  REFRESH_TTL_SECONDS: z.coerce.number().int().positive().default(1209600),
+  OTP_TTL_SECONDS: z.coerce.number().int().positive().default(300),
+  LOGIN_ATTEMPTS_LIMIT: z.coerce.number().int().positive().default(5),
+  LOGIN_LOCK_TTL_SECONDS: z.coerce.number().int().positive().default(900),
+  OTP_ATTEMPTS_LIMIT: z.coerce.number().int().positive().default(5),
+  OTP_LOCK_TTL_SECONDS: z.coerce.number().int().positive().default(900),
+  METRICS_PATH: z.string().default('/metrics'),
+  OTEL_ENABLED: z.coerce.boolean().optional().default(false),
+  OTEL_EXPORTER_OTLP_ENDPOINT: z.string().optional(),
+  SERVICE_NAME: z.string().default('nest-hex-backend'),
+  SMTP_HOST: z.string().min(1),
+  SMTP_PORT: z.coerce.number().int().positive(),
+  SMTP_USER: z.string().min(1),
+  SMTP_PASS: z.string().min(1),
+  SMTP_FROM: z.string().min(1),
+  SCALAR_USERNAME: z.string().min(1),
+  SCALAR_PASSWORD: z.string().min(1),
+  API_REFERENCE_PATH: z.string().default('/api/v1/reference'),
+  OPENAPI_JSON_PATH: z.string().default('/api/v1/openapi.json')
+});
+
+export type Env = z.infer<typeof envSchema>;
